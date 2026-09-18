@@ -7,20 +7,20 @@
     <!-- Подключаем Telegram Web App API -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg-color: var(--tg-theme-bg-color, #121212);
-            --text-color: var(--tg-theme-text-color, #ffffff);
-            --hint-color: var(--tg-theme-hint-color, #888888);
-            --button-color: var(--tg-theme-button-color, #3390ec);
-            --button-text-color: var(--tg-theme-button-text-color, #ffffff);
-            --card-bg: var(--tg-theme-secondary-bg-color, #1e1e1e);
+       :root {
+            --bg-color: #0A0A0A; /* Глубокий черный фон */
+            --text-color: #F5F5F5; /* Мягкий белый текст */
+            --hint-color: #737373; /* Благородный серый */
+            --button-color: #FFFFFF; /* Белая кнопка для максимального контраста */
+            --button-text-color: #000000; /* Черный текст на кнопке */
+            --border-color: #262626; /* Цвет тонких графичных линий */
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Inter, sans-serif;
         }
 
         body {
@@ -30,44 +30,45 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
             overflow-x: hidden;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
-            margin-top: 20px;
+            margin-bottom: 40px;
         }
 
         h1 {
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 22px;
+            font-weight: 500;
             letter-spacing: -0.5px;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         p.subtitle {
             color: var(--hint-color);
-            font-size: 14px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .slots-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             width: 100%;
             max-width: 400px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
+        /* Минималистичные карточки без заливки, только тонкий контур */
         .slot {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px; 
+            padding: 24px 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.05);
             min-height: 90px;
             display: flex;
             flex-direction: column;
@@ -75,39 +76,36 @@
         }
 
         .slot-label {
-            font-size: 12px;
+            font-size: 10px;
             color: var(--hint-color);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
         }
 
         .slot-value {
             font-size: 18px;
-            font-weight: 600;
-            line-height: 1.3;
-            transition: opacity 0.1s ease;
+            font-weight: 400;
+            line-height: 1.4;
+            transition: opacity 0.1s ease, transform 0.1s ease;
         }
 
-        /* Анимация прокрутки */
         .rolling .slot-value {
-            opacity: 0.5;
-            transform: scale(0.98);
+            opacity: 0.3;
+            transform: translateY(2px);
         }
 
-        /* Карточка с композицией */
         .composition-card {
             width: 100%;
             max-width: 400px;
-            background-color: rgba(51, 144, 236, 0.1); /* Легкий оттенок акцентного цвета */
-            border-left: 4px solid var(--button-color);
-            border-radius: 0 12px 12px 0;
-            padding: 16px;
-            margin-top: 10px;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px 20px;
             opacity: 0;
             transform: translateY(10px);
             transition: opacity 0.5s ease, transform 0.5s ease;
-            display: none; /* Скрыта до первой генерации */
+            display: none;
         }
 
         .composition-card.visible {
@@ -117,41 +115,48 @@
         }
 
         .comp-title {
-            font-size: 13px;
-            color: var(--button-color);
+            font-size: 11px;
+            color: var(--text-color);
             text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 6px;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .comp-text {
-            font-size: 15px;
-            line-height: 1.4;
-            color: var(--text-color);
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--hint-color);
         }
 
-        /* Кнопка для веб-версии (скрывается в ТГ, если используется MainButton) */
+        .comp-text b {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
         .generate-btn {
             background-color: var(--button-color);
             color: var(--button-text-color);
             border: none;
-            border-radius: 12px;
-            padding: 16px 32px;
-            font-size: 16px;
+            border-radius: 8px;
+            padding: 18px 32px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             font-weight: 600;
             width: 100%;
             max-width: 400px;
             margin-top: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(51, 144, 236, 0.3);
-            transition: transform 0.1s;
+            transition: transform 0.1s, opacity 0.2s;
         }
 
         .generate-btn:active {
-            transform: scale(0.96);
+            transform: scale(0.98);
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -159,7 +164,7 @@
 
     <header>
         <h1>FrameShift by JaneChe</h1>
-        <p class="subtitle">Генератор креативных ограничений</p>
+        <p class="subtitle">Карманный режиссер твоих съемок</p>
     </header>
 
     <div class="slots-container">
