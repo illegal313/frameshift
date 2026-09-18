@@ -203,6 +203,7 @@
         if (tg.initDataUnsafe && Object.keys(tg.initDataUnsafe).length > 0) {
             fallbackBtn.style.display = 'none';
             tg.MainButton.setText("СГЕНЕРИРОВАТЬ ИДЕЮ");
+            tg.MainButton.color = "#FFFFFF"; tg.MainButton.textColor = "#000000";
             tg.MainButton.show();
             tg.MainButton.onClick(startRoll);
         }
