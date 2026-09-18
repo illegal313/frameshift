@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FrameShift by JaneChe</title>
-    <!-- Подключаем Telegram Web App API -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-       :root {
-            --bg-color: #0A0A0A; /* Глубокий черный фон */
-            --text-color: #F5F5F5; /* Мягкий белый текст */
-            --hint-color: #737373; /* Благородный серый */
-            --button-color: #FFFFFF; /* Белая кнопка для максимального контраста */
-            --button-text-color: #000000; /* Черный текст на кнопке */
-            --border-color: #262626; /* Цвет тонких графичных линий */
+        :root {
+            --bg-color: #0A0A0A;
+            --text-color: #F5F5F5;
+            --hint-color: #737373;
+            --button-color: #FFFFFF;
+            --button-text-color: #000000;
+            --border-color: #262626;
         }
 
         * {
@@ -30,13 +29,14 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 30px 20px;
             overflow-x: hidden;
+            padding-bottom: 100px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
 
         h1 {
@@ -53,23 +53,52 @@
             letter-spacing: 2px;
         }
 
+        .mode-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .mode-btn {
+            background: transparent;
+            color: var(--hint-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: var(--text-color);
+            color: var(--bg-color);
+            border-color: var(--text-color);
+        }
+
         .slots-container {
             display: flex;
             flex-direction: column;
             gap: 12px;
             width: 100%;
             max-width: 400px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
-        /* Минималистичные карточки без заливки, только тонкий контур */
         .slot {
             background-color: transparent;
             border: 1px solid var(--border-color);
             border-radius: 8px; 
-            padding: 24px 20px;
+            padding: 20px;
             text-align: center;
-            min-height: 90px;
+            min-height: 85px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -80,11 +109,11 @@
             color: var(--hint-color);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .slot-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 400;
             line-height: 1.4;
             transition: opacity 0.1s ease, transform 0.1s ease;
@@ -95,46 +124,95 @@
             transform: translateY(2px);
         }
 
-        .composition-card {
+        /* Универсальный стиль карточек */
+        .info-card {
             width: 100%;
             max-width: 400px;
             background-color: transparent;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 24px 20px;
+            padding: 20px;
+            margin-bottom: 12px;
+        }
+
+        /* Скрытые по умолчанию карточки (появятся после генерации) */
+        .hidden-card {
+            display: none;
             opacity: 0;
             transform: translateY(10px);
             transition: opacity 0.5s ease, transform 0.5s ease;
-            display: none;
         }
 
-        .composition-card.visible {
+        .hidden-card.visible {
             display: block;
             opacity: 1;
             transform: translateY(0);
         }
 
-        .comp-title {
+        .card-title {
             font-size: 11px;
             color: var(--text-color);
             text-transform: uppercase;
             letter-spacing: 1.5px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .comp-text {
-            font-size: 14px;
+        .card-text {
+            font-size: 13px;
             line-height: 1.5;
             color: var(--hint-color);
         }
 
-        .comp-text b {
+        .card-text b {
             color: var(--text-color);
             font-weight: 500;
+        }
+
+        /* Стили для селектора типажа */
+        .custom-select {
+            width: 100%;
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%20fill%3D%22%23F5F5F5%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+        }
+
+        .custom-select option {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px dashed var(--hint-color);
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:active {
+            background: rgba(255,255,255,0.1);
         }
 
         .generate-btn {
@@ -151,21 +229,29 @@
             max-width: 400px;
             margin-top: 20px;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
-        }
-
-        .generate-btn:active {
-            transform: scale(0.98);
-            opacity: 0.8;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>FrameShift by JaneChe</h1>
-        <p class="subtitle">Карманный режиссер твоих съемок</p>
+        <h1>FrameShift</h1>
+        <p class="subtitle">by JaneChe</p>
     </header>
+
+    <div class="mode-selector" id="mode-selector">
+        <button class="mode-btn active" data-mode="wedding">Свадьба</button>
+        <button class="mode-btn" data-mode="photoshoot">Фотосессия</button>
+        <button class="mode-btn" data-mode="content">Контент</button>
+        <button class="mode-btn" data-mode="blog">Личный блог</button>
+    </div>
+
+    <!-- Карточка выбора психологии (всегда на виду) -->
+    <div class="info-card" id="typology-card">
+        <div class="card-title">💡 Клиентский типаж</div>
+        <select id="typology-select" class="custom-select"></select>
+        <div class="card-text" id="typology-text"></div>
+    </div>
 
     <div class="slots-container">
         <div class="slot">
@@ -182,71 +268,159 @@
         </div>
     </div>
 
-    <div class="composition-card" id="comp-card">
-        <div class="comp-title">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
-            Совет по композиции
-        </div>
-        <div class="comp-text" id="comp-text">Здесь будет правило композиции</div>
+    <!-- Скрытые карточки (появляются после генерации) -->
+    <div class="info-card hidden-card" id="comp-card">
+        <div class="card-title">📐 Композиция</div>
+        <div class="card-text" id="comp-text"></div>
     </div>
 
-    <!-- Резервная кнопка, если открыто не в Telegram -->
+    <div class="info-card hidden-card" id="ai-card">
+        <div class="card-title">🤖 AI Прешут (Промпт)</div>
+        <div class="card-text">Сгенерируйте референс в нейросети:</div>
+        <button class="copy-btn" id="copy-ai-btn" onclick="copyPrompt()">Скопировать промпт</button>
+    </div>
+
     <button class="generate-btn" id="fallback-btn" onclick="startRoll()">Сгенерировать идею</button>
 
     <script>
-        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем на весь экран
+        tg.expand(); 
 
-        // Скрываем обычную кнопку, если мы в Telegram, и показываем нативную
         const fallbackBtn = document.getElementById('fallback-btn');
         if (tg.initDataUnsafe && Object.keys(tg.initDataUnsafe).length > 0) {
             fallbackBtn.style.display = 'none';
             tg.MainButton.setText("СГЕНЕРИРОВАТЬ ИДЕЮ");
-            tg.MainButton.color = "#FFFFFF"; tg.MainButton.textColor = "#000000";
+            tg.MainButton.color = "#FFFFFF"; 
+            tg.MainButton.textColor = "#000000";
             tg.MainButton.show();
             tg.MainButton.onClick(startRoll);
         }
 
-        // Базы данных
-        const dbLight = [
-            'Жесткий свет + цветной фильтр', 'Только контровой свет', 
-            'Вспышка в лоб (стиль папарацци)', 'Один источник строго сверху', 
-            'Свет через жалюзи (Гобо)', 'Мягкий свет только от окна',
-            'Отраженный свет от стены', 'Длинная выдержка со смешанным светом'
-        ];
-
-        const dbAngle = [
-            'Съемка от самого пола', 'Максимально сверху (вид птицы)', 
-            'Голландский угол (наклон камеры)', 'Через передний план (фрейминг)', 
-            'Крупный план фактуры / макро', 'Уровень груди', 
-            'Съемка из-за укрытия/предмета'
-        ];
-
-        const dbConstraint = [
-            'Модель не использует руки в кадре', 'В кадре только один предмет мебели', 
-            'Съемка в движении (добавить смаз)', 'Лицо скрыто (тенью или предметом)', 
-            'Использовать отражение (зеркало, телефон, стекло)', 
-            'Сильная асимметрия в позировании', 'Снимать только через видоискатель (не смотря на экран)'
-        ];
+        const databases = {
+            wedding: {
+                light: [
+                    { ru: 'Контровой от окна', en: 'backlight from window' },
+                    { ru: 'Жесткая вспышка (папарацци)', en: 'direct hard flash paparazzi style' },
+                    { ru: 'Естественный рассеянный', en: 'soft natural diffuse light' },
+                    { ru: 'Силуэт против солнца', en: 'high contrast silhouette against sun' }
+                ],
+                angle: [
+                    { ru: 'Через плечо гостя', en: 'over the shoulder view' },
+                    { ru: 'Максимально снизу', en: 'low angle shot' },
+                    { ru: 'Издалека через препятствие', en: 'voyeuristic shot through obstacles' }
+                ],
+                constraint: [
+                    { ru: 'Только ч/б, фокус на детали', en: 'black and white, focus on details' },
+                    { ru: 'Полная статика пары, смаз вокруг', en: 'static couple with motion blur around' },
+                    { ru: 'Снимать только детали одежды', en: 'focusing only on fabric and outfit details' }
+                ]
+            },
+            photoshoot: {
+                light: [
+                    { ru: 'Цветные фильтры (Красный+Синий)', en: 'red and blue cinematic gel lighting' },
+                    { ru: 'Свет через жалюзи (Гобо)', en: 'gobo lighting through window blinds' },
+                    { ru: 'Один источник сверху (Драма)', en: 'single top-down dramatic spotlight' }
+                ],
+                angle: [
+                    { ru: 'Голландский угол', en: 'dutch angle' },
+                    { ru: 'Макро (фактура кожи)', en: 'extreme close-up macro photography' },
+                    { ru: 'Ширик в упор', en: 'close up with wide angle lens' }
+                ],
+                constraint: [
+                    { ru: 'Модель не использует руки', en: 'model posing without using hands' },
+                    { ru: 'Сильная асимметрия', en: 'strong asymmetrical posing' },
+                    { ru: 'Лицо полностью в тени', en: 'face completely hidden in shadow' }
+                ]
+            },
+            content: {
+                light: [
+                    { ru: 'Плоский яркий свет', en: 'bright flat lay lighting' },
+                    { ru: 'Жесткие тени (солнце)', en: 'hard sunlight with crisp shadows' },
+                    { ru: 'Неоновая подсветка', en: 'neon accent lighting' }
+                ],
+                angle: [
+                    { ru: 'Строго сверху (Flatlay)', en: 'strict top-down flatlay angle' },
+                    { ru: 'Под углом 45 градусов', en: '45 degree product angle' },
+                    { ru: 'На уровне стола', en: 'table level perspective' }
+                ],
+                constraint: [
+                    { ru: 'Оставить 50% под текст', en: 'extreme negative space for typography' },
+                    { ru: 'Монохромная палитра', en: 'monochromatic color palette' },
+                    { ru: 'Добавить динамику (падающий предмет)', en: 'dynamic motion freeze frame' }
+                ]
+            },
+            blog: {
+                light: [
+                    { ru: 'Свет от экрана ноутбука', en: 'glow from laptop screen' },
+                    { ru: 'Золотой час', en: 'golden hour lighting' },
+                    { ru: 'Случайный блик', en: 'lens flare and light leaks' }
+                ],
+                angle: [
+                    { ru: 'Случайное селфи', en: 'casual selfie angle' },
+                    { ru: 'POV (От первого лица)', en: 'POV first person perspective' },
+                    { ru: 'Через зеркало', en: 'shot through a mirror' }
+                ],
+                constraint: [
+                    { ru: 'Умышленный расфокус', en: 'intentional out of focus aesthetic' },
+                    { ru: 'Хаос на заднем фоне', en: 'messy authentic background' },
+                    { ru: 'Съемка в движении', en: 'walking motion blur' }
+                ]
+            }
+        };
 
         const dbComposition = [
-            { name: 'Негативное пространство', desc: 'Оставьте 70-80% кадра пустым (небо, чистый фон). Это подчеркнет объект и добавит воздуха.' },
-            { name: 'Ведущие линии', desc: 'Найдите в локации линии (перила, тени, архитектуру), которые будут вести взгляд зрителя прямо к модели.' },
-            { name: 'Естественный фрейминг', desc: 'Снимайте через арку, дверной проем, ветки или элементы студии, чтобы создать "рамку в рамке".' },
-            { name: 'Правило третей (классика)', desc: 'Разместите ключевой элемент (глаз модели или главный акцент) строго на пересечении линий третей.' },
-            { name: 'Центральная симметрия', desc: 'Забудьте про трети. Поместите модель идеально по центру кадра, создав строгий баланс левого и правого.' },
-            { name: 'Диагонали', desc: 'Выстройте геометрию кадра или позу модели по диагонали — это добавит кадру кинематографичной динамики.' },
-            { name: 'Многоплановость', desc: 'Обязательно включите в кадр объекты на переднем (размытом) и заднем планах, чтобы создать визуальный объем.' }
+            { name: 'Негативное пространство', desc: 'Оставьте 70-80% кадра пустым.' },
+            { name: 'Ведущие линии', desc: 'Ищите линии (перила, тени), ведущие взгляд к модели.' },
+            { name: 'Естественный фрейминг', desc: 'Снимайте через арку, ветки или элементы интерьера.' },
+            { name: 'Центральная симметрия', desc: 'Поместите модель идеально по центру кадра.' },
+            { name: 'Диагонали', desc: 'Выстройте геометрию кадра или позу по диагонали.' }
         ];
 
-        // Элементы интерфейса
+        const typologies = [
+            { type: 'Зажатый аналитик (не знает куда деть руки)', advice: 'Дайте четкую физическую задачу: "поправь часы", "перенеси вес на левую ногу".' },
+            { type: 'Суетливый торопыга (постоянно двигается)', advice: 'Снизьте темп. Посадите модель, попросите закрыть глаза на 10 секунд и сделать глубокий вдох.' },
+            { type: 'Самокритик (боится плохо получиться)', advice: 'Покажите первый же удачный кадр. Хвалите конкретику: "отличный поворот плеча", "супер взгляд".' },
+            { type: 'Деревянный солдат (позирует по шаблонам)', advice: 'Дайте реквизит или включите движение: попросите идти на вас или сбрасывать пиджак с плеча.' }
+        ];
+
+        // Логика списка типажей
+        const typeSelect = document.getElementById('typology-select');
+        const typeText = document.getElementById('typology-text');
+
+        typologies.forEach((t, index) => {
+            let opt = document.createElement('option');
+            opt.value = index;
+            opt.innerText = t.type;
+            typeSelect.appendChild(opt);
+        });
+
+        typeSelect.addEventListener('change', (e) => {
+            const selected = typologies[e.target.value];
+            typeText.innerHTML = `<b>Совет:</b> ${selected.advice}`;
+            if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        });
+        
+        // Запускаем первичное заполнение текста при старте
+        typeSelect.dispatchEvent(new Event('change'));
+
+        let currentMode = 'wedding';
+        let currentAiPrompt = '';
+
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentMode = e.target.dataset.mode;
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            });
+        });
+
         const elLight = document.getElementById('slot-light');
         const elAngle = document.getElementById('slot-angle');
         const elConstraint = document.getElementById('slot-constraint');
-        const compCard = document.getElementById('comp-card');
-        const compText = document.getElementById('comp-text');
         
+        const compCard = document.getElementById('comp-card');
+        const aiCard = document.getElementById('ai-card');
         let isRolling = false;
 
         function getRandomItem(array) {
@@ -257,53 +431,66 @@
             if (isRolling) return;
             isRolling = true;
 
-            // Скрываем карточку композиции на время прокрутки
             compCard.classList.remove('visible');
+            aiCard.classList.remove('visible');
+            document.getElementById('copy-ai-btn').innerText = "Скопировать промпт";
 
-            // Виброотклик Telegram (если доступен)
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
             document.querySelectorAll('.slot').forEach(s => s.classList.add('rolling'));
 
             let iterations = 0;
-            const maxIterations = 15; // Сколько раз моргнет текст
-            
             const rollInterval = setInterval(() => {
-                elLight.innerText = getRandomItem(dbLight);
-                elAngle.innerText = getRandomItem(dbAngle);
-                elConstraint.innerText = getRandomItem(dbConstraint);
+                elLight.innerText = getRandomItem(databases[currentMode].light).ru;
+                elAngle.innerText = getRandomItem(databases[currentMode].angle).ru;
+                elConstraint.innerText = getRandomItem(databases[currentMode].constraint).ru;
                 
                 iterations++;
-                if (iterations >= maxIterations) {
+                if (iterations >= 12) {
                     clearInterval(rollInterval);
                     finishRoll();
                 }
-            }, 80); // Скорость прокрутки
+            }, 80);
         }
 
         function finishRoll() {
             document.querySelectorAll('.slot').forEach(s => s.classList.remove('rolling'));
             
-            // Финальные значения
-            const finalConstraint = getRandomItem(dbConstraint);
-            elLight.innerText = getRandomItem(dbLight);
-            elAngle.innerText = getRandomItem(dbAngle);
-            elConstraint.innerText = finalConstraint;
-
-            // Выбираем правило композиции
-            const comp = getRandomItem(dbComposition);
+            const l = getRandomItem(databases[currentMode].light);
+            const a = getRandomItem(databases[currentMode].angle);
+            const c = getRandomItem(databases[currentMode].constraint);
             
-            // Формируем умный текст, связывающий правило и текущее ограничение
-            compText.innerHTML = `Попробуйте использовать <b>${comp.name}</b>: ${comp.desc} В сочетании с задачей «<i>${finalConstraint.toLowerCase()}</i>» это заставит зрителя дольше рассматривать снимок.`;
+            elLight.innerText = l.ru;
+            elAngle.innerText = a.ru;
+            elConstraint.innerText = c.ru;
 
-            // Показываем карточку композиции с задержкой
+            // Композиция
+            const comp = getRandomItem(dbComposition);
+            document.getElementById('comp-text').innerHTML = `<b>${comp.name}:</b> ${comp.desc} Хорошо работает с задачей «${c.ru.toLowerCase()}».`;
+
+            // AI Промпт
+            const subject = currentMode === 'wedding' ? 'a wedding couple' : 
+                            currentMode === 'photoshoot' ? 'a fashion model' : 
+                            currentMode === 'content' ? 'aesthetic product composition' : 'a lifestyle portrait';
+            
+            currentAiPrompt = `Photography of ${subject}, ${a.en}, ${l.en}, ${c.en}, shot on 35mm lens, highly detailed, cinematic lighting, 8k, photorealistic --ar 4:5`;
+
+            // Показываем карточки
+            setTimeout(() => compCard.classList.add('visible'), 100);
             setTimeout(() => {
-                compCard.classList.add('visible');
-                // Виброотклик об успешной генерации
+                aiCard.classList.add('visible');
                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            }, 200);
+            }, 250);
 
             isRolling = false;
+        }
+
+        function copyPrompt() {
+            navigator.clipboard.writeText(currentAiPrompt).then(() => {
+                const btn = document.getElementById('copy-ai-btn');
+                btn.innerText = "✓ Скопировано!";
+                btn.style.borderColor = "var(--text-color)";
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            });
         }
     </script>
 </body>
